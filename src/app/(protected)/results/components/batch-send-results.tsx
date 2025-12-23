@@ -107,7 +107,7 @@ export function BatchSendResults({ evaluationPeriodId, results, dormers, getRank
 
                 let emailHtml = ''
 
-                if (totalResultsCount - getRank(result.id) < parseInt(numberOfEvicted)) {
+                if (getRank(result.id) > totalResultsCount - parseInt(numberOfEvicted)) {
                     emailHtml = getEvictedResultsEmail(
                         `${dormer.first_name} ${dormer.last_name}`,
                         formattedResults,

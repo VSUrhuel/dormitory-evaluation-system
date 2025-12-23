@@ -24,9 +24,11 @@ interface SendResultsProps {
     evaluationPeriodId: string
     totalScore: number
     rank: number
+    numberOfEvicted: string
+    totalResultsCount: number
 }
 
-export function SendResults({ dormer, evaluationPeriodId, totalScore, rank }: SendResultsProps) {
+export function SendResults({ dormer, evaluationPeriodId, totalScore, rank, numberOfEvicted, totalResultsCount }: SendResultsProps) {
     const [sending, setSending] = React.useState(false)
     const [confirmOpen, setConfirmOpen] = React.useState(false)
     const supabase = createClient()
@@ -88,7 +90,7 @@ export function SendResults({ dormer, evaluationPeriodId, totalScore, rank }: Se
             const schoolYear = periodData.school_year?.year || "Unknown Year"
             const semester = periodData.semester || "Unknown Semester"
             let emailHtml = ''
-            if (rank > 53) {
+            if (rank > totalResultsCount - parseInt(numberOfEvicted)) {
                 emailHtml = getEvictedResultsEmail(
                     `${dormer.first_name} ${dormer.last_name}`,
                     formattedResults,

@@ -21,6 +21,7 @@ export default function ResultsPage() {
     const [isLoading, setIsLoading] = React.useState(false)
     const [evaluationPeriods, setEvaluationPeriods] = React.useState<EvaluationPeriod[]>([])
     const [selectedPeriodId, setSelectedPeriodId] = React.useState<string>("")
+    const [selectedEvictedCount, setSelectedEvictedCount] = React.useState<string>("")
     const [results, setResults] = React.useState<Results[]>([])
     const [dormers, setDormers] = React.useState<Dormer[]>([])
     const [selectedRoom, setSelectedRoom] = React.useState<string>("all")
@@ -157,8 +158,15 @@ export default function ResultsPage() {
         return dormer || null
     }
 
+    // Always sort by highest score first for ranking
+    const rankedResults = React.useMemo(() => {
+        const sorted = [...results]
+        sorted.sort((a, b) => b.total_weighted_score - a.total_weighted_score)
+        return sorted
+    }, [results])
+
     const getActualRank = (resultId: string) => {
-        const index = sortedResults.findIndex(r => r.id === resultId)
+        const index = rankedResults.findIndex(r => r.id === resultId)
         return index !== -1 ? index + 1 : 0
     }
 
@@ -193,6 +201,8 @@ export default function ResultsPage() {
                             results={filteredAndSortedResults}
                             dormers={dormers}
                             getRank={getActualRank}
+                            numberOfEvicted={selectedEvictedCount}
+                            totalResultsCount={results.length}
                         />
                     </div>
                 )}
@@ -224,6 +234,20 @@ export default function ResultsPage() {
                     </SelectContent>
                 </Select>
 
+                <Select value={selectedEvictedCount} onValueChange={setSelectedEvictedCount}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Count of dormers to be evicted" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="0">0</SelectItem>
+                        <SelectItem value="1">1</SelectItem>
+                        <SelectItem value="2">2</SelectItem>
+                        <SelectItem value="3">3</SelectItem>
+                        <SelectItem value="4">4</SelectItem>
+                        <SelectItem value="5">5</SelectItem>
+                    </SelectContent>
+                </Select>
+
                 <Select value={sortOrder} onValueChange={(v: 'asc' | 'desc') => setSortOrder(v)}>
                     <SelectTrigger>
                         <SelectValue placeholder="Sort Order" />
@@ -233,6 +257,8 @@ export default function ResultsPage() {
                         <SelectItem value="asc">Lowest Score First</SelectItem>
                     </SelectContent>
                 </Select>
+
+
                 <Input
                     placeholder="Search by name or room..."
                     value={searchQuery}
@@ -338,6 +364,8 @@ export default function ResultsPage() {
                                                         evaluationPeriodId={selectedPeriodId}
                                                         totalScore={result.total_weighted_score}
                                                         rank={rank}
+                                                        numberOfEvicted={selectedEvictedCount}
+                                                        totalResultsCount={results.length}
                                                     />
                                                 )}
                                             </div>

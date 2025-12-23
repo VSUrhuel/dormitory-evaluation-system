@@ -23,9 +23,11 @@ interface BatchSendResultsProps {
     results: Results[]
     dormers: Dormer[]
     getRank: (resultId: string) => number
+    numberOfEvicted: string
+    totalResultsCount: number
 }
 
-export function BatchSendResults({ evaluationPeriodId, results, dormers, getRank }: BatchSendResultsProps) {
+export function BatchSendResults({ evaluationPeriodId, results, dormers, getRank, numberOfEvicted, totalResultsCount }: BatchSendResultsProps) {
     const [sending, setSending] = React.useState(false)
     const [confirmOpen, setConfirmOpen] = React.useState(false)
     const supabase = createClient()
@@ -105,7 +107,7 @@ export function BatchSendResults({ evaluationPeriodId, results, dormers, getRank
 
                 let emailHtml = ''
 
-                if (getRank(result.id) > 53) {
+                if (totalResultsCount - getRank(result.id) < parseInt(numberOfEvicted)) {
                     emailHtml = getEvictedResultsEmail(
                         `${dormer.first_name} ${dormer.last_name}`,
                         formattedResults,

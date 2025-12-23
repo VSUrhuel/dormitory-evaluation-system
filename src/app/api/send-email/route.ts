@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     const mailOptions = {
       // Use the 'from' value from the payload if provided, 
       // otherwise, use a default from the SMTP user (must be authorized)
-      from: from || process.env.SMTP_USER,
+      from: from || `"Mabolo Evaluation System" <${process.env.SMTP_USER}>`,
       to: recipients.join(', '), // Nodemailer expects a comma-separated string or array
       subject: subject || 'No Subject',
       html: html || '',

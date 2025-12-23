@@ -133,7 +133,7 @@ export const getResultsEmail = (dormerName: string, criteriaResults: { name: str
                     <tr>
                         <td style="padding: 40px 30px;">
                             <h2 style="margin: 0 0 10px 0; color: #1f2937; font-size: 24px; font-weight: 600;">
-                                Hello, ${dormerName}
+                                Congratulations, ${dormerName}
                             </h2>
                             <p style="margin: 0 0 30px 0; color: #6b7280; font-size: 16px;">
                                 Your evaluation results have been finalized. Here is a breakdown of your performance based on the specific criteria.
@@ -254,7 +254,7 @@ export const getEvictedResultsEmail = (dormerName: string, criteriaResults: { na
                     <tr>
                         <td style="padding: 40px 30px;">
                             <h2 style="margin: 0 0 10px 0; color: #1f2937; font-size: 24px; font-weight: 600;">
-                                Dear ${dormerName},
+                                Thank you, ${dormerName}
                             </h2>
                             
                             <div style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">

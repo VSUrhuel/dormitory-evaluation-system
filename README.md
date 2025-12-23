@@ -2,7 +2,6 @@
 
 A modern, comprehensive web application designed to streamline the evaluation and management process for dormitory residents. Built with performance, usability, and aesthetics in mind.
 
----
 
 ## ✨ Key Features
 
@@ -120,6 +119,4 @@ dormers.
 ├── 📄 tailwind.config.ts    # Tailwind CSS configuration
 └── 📄 package.json          # Dependencies and scripts
 ```
-
----
 

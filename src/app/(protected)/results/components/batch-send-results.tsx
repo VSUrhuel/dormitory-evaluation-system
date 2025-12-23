@@ -3,7 +3,7 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Mail, Loader2, Send } from "lucide-react"
-import { getResultsEmail } from "@/lib/email-templates"
+import { getResultsEmail, getEvictedResultsEmail } from "@/lib/email-templates"
 import { Dormer, Results } from "@/types"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
@@ -103,14 +103,27 @@ export function BatchSendResults({ evaluationPeriodId, results, dormers, getRank
                     score: typeof item.total_score === 'number' ? item.total_score : 0
                 }))
 
-                const emailHtml = getResultsEmail(
-                    `${dormer.first_name} ${dormer.last_name}`,
-                    formattedResults,
-                    result.total_weighted_score,
-                    getRank(result.id),
-                    schoolYear,
-                    semester
-                )
+                let emailHtml = ''
+
+                if (getRank(result.id) > 53) {
+                    emailHtml = getEvictedResultsEmail(
+                        `${dormer.first_name} ${dormer.last_name}`,
+                        formattedResults,
+                        result.total_weighted_score,
+                        getRank(result.id),
+                        schoolYear,
+                        semester
+                    )
+                } else {
+                    emailHtml = getResultsEmail(
+                        `${dormer.first_name} ${dormer.last_name}`,
+                        formattedResults,
+                        result.total_weighted_score,
+                        getRank(result.id),
+                        schoolYear,
+                        semester
+                    )
+                }
 
                 const response = await fetch("/api/send-email", {
                     method: "POST",
